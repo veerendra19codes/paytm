@@ -9,15 +9,15 @@ const router = express.Router();
 router.get("/balance",authMiddleware, async (req, res) => {
     try {
         const userId = await req.userId;
-        console.log("userId:",userId);
+        // console.log("userId:",userId);
         const account = await Account.findOne({userId});
-        console.log("account", account);
+        // console.log("account", account);
         return res.status(200).json({
             balance: account.balance
         })
 
     } catch (error) {
-        console.log("error in getting balance: ", error);
+        // console.log("error in getting balance: ", error);
         return res.status(411).json({
             message: "Error in getting balance"
         })
@@ -31,7 +31,9 @@ router.get("/balance",authMiddleware, async (req, res) => {
 
 router.post("/transfer", authMiddleware, async (req, res) => {
     try {
+        console.log("hello")
         const session = await mongoose.startSession();
+        console.log("hello: again");
 
         session.startTransaction();
         const { to, amount } = req.body;
@@ -43,12 +45,10 @@ router.post("/transfer", authMiddleware, async (req, res) => {
         //         message: "Invalid receiver or Insufficient balance"
         //     })
         // }
+        console.log("req.userId: ", req.userId);
 
-        const fromAccount = await User.findOne({ _id: req.userId});
+        const fromAccount = await Account.findOne({userId: req.userId}).session(session);
         console.log("fromAccount: ", fromAccount);
-
-        const toAccount = await User.findById({_id: to});
-        console.log("toAccount: ", toAccount);
 
         if(fromAccount.balance < amount) {
             await session.abortTransaction();
@@ -57,9 +57,14 @@ router.post("/transfer", authMiddleware, async (req, res) => {
             })
         }
 
-        await Account.findByIdAndUpdate({ userId: req.userId },{$inc: {balance: -amount}})
+        console.log("fromAccount before: ", fromAccount);
+        
+        await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } }).session(session);
+        await Account.updateOne({ userId: to }, { $inc: { balance: amount } }).session(session);
 
-        await Account.findByIdAndUpdate({ userId: to },{$inc: {balance: amount}})
+        const fromAccountAfter = await Account.findOne({userId: req.userId}).session(session);
+
+        console.log("fromAccount after: ", fromAccountAfter);
 
         await session.commitTransaction();
 

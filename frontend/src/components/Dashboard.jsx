@@ -14,23 +14,23 @@ const Dashboard = () => {
 
     console.log("allUsers: ", allUsers);
 
-    useEffect(() => {
-        const fetchBalance = async () => {
-            const paytmtoken = localStorage.getItem("paytmtoken");
-            console.log("paytmtoken: ", paytmtoken);
-            if (!paytmtoken) {
-                navigate("/signin");
-                return;
-            }
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/account/balance`, {
-                headers: {
-                    "Authorization": `Bearer ${paytmtoken}`,
-                    "Content-Type": "application/json"
-                }
-            });
-            // console.log("res: ", res);
-            setBalance(res.data.balance)
+    const fetchBalance = async () => {
+        const paytmtoken = localStorage.getItem("paytmtoken");
+        console.log("paytmtoken: ", paytmtoken);
+        if (!paytmtoken) {
+            navigate("/signin");
+            return;
         }
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/account/balance`, {
+            headers: {
+                "Authorization": `Bearer ${paytmtoken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        // console.log("res: ", res);
+        setBalance(res.data.balance)
+    }
+    useEffect(() => {
         fetchBalance();
     }, [navigate]);
 
@@ -87,7 +87,7 @@ const Dashboard = () => {
                 ))}
             </div>
 
-            <Send show={show} amount={amount} to={to} setAmount={setAmount} />
+            <Send show={show} setShow={setShow} amount={amount} to={to._id} setAmount={setAmount} fetchBalance={fetchBalance} />
         </div>
     )
 }

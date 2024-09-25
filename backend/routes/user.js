@@ -16,13 +16,13 @@ const signUpSchema = zod.object({
 
 router.post("/signup", async (req, res) => {
     const {username, firstName, lastName, password} = req.body;
-    console.log("req.body: ", req.body);
+    // console.log("req.body: ", req.body);
 
     // validating inputs
     const { success } = signUpSchema.safeParse(req.body);
 
     if(!success) {
-        console.log("invalid inputs");
+        // console.log("invalid inputs");
         return res.status(411).json({
             message: "Invalid inputs"
         })
@@ -32,7 +32,7 @@ router.post("/signup", async (req, res) => {
     //check if user already exists
     const exists = await User.findOne({ username});
     if(exists) {
-        console.log("user already exists:");
+        // console.log("user already exists:");
         return res.status(411).json({message:"Email already taken / Incorrect inputs"});
     }
 
@@ -55,7 +55,7 @@ router.post("/signup", async (req, res) => {
 
     // creating token using userid
     const token = jwt.sign({ userId }, JWT_SECRET);
-    console.log("new user created")
+    // console.log("new user created")
 
     return res.status(200).json({message:"User created successfully", token})
 })
@@ -132,9 +132,9 @@ router.get("/bulk", authMiddleware, async (req, res) => {
             }
         ]
     })
-    console.log("userId: ", req.userId);
+    // console.log("userId: ", req.userId);
     const filteredUsers = users.filter((user) => user._id != req.userId);
-    console.log("filteredUser: ", filteredUsers);
+    // console.log("filteredUser: ", filteredUsers);
 
     return res.json({
         user: filteredUsers.map((user) => ({
