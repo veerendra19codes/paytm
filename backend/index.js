@@ -2,6 +2,10 @@ const express = require("express");
 const rootRouter = require("./routes/index");
 const cors = require("cors");
 const { connectDb } = require("./db");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 connectDb();
 
@@ -17,7 +21,7 @@ app.get("/", (req, res) => {
     console.log("hello");
 })
 
-app.listen(3000, (req, res) => {
+app.listen(PORT, (req, res) => {
     console.log("server listening")
 })
 
