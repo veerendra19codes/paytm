@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function Send({ show, setShow, amount, to, setAmount, fetchBalance }) {
+const Send = ({ show, setShow, amount, to, setAmount, fetchBalance }) => {
     console.log("show: ", show);
     console.log("to: ", to);
 
@@ -48,3 +48,5 @@ export default function Send({ show, setShow, amount, to, setAmount, fetchBalanc
         </div>
     )
 }
+
+export default Send

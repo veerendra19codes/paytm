@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import Send from "./send";
+import Send from "./Send";
 
 const Dashboard = () => {
     const navigate = useNavigate();
