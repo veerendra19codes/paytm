@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Signup from "./components/Signup"
 import Signin from "./components/Signin"
 import Dashboard from "./components/Dashboard"
-import Send from "./components/send"
+import Send from "./components/Send"
 import Navbar from "./components/Navbar"
 
 
