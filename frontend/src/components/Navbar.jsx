@@ -1,7 +1,10 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    if (location.pathname == "/sigin" || location.pathname == "/signup") return null;
 
     const handleSignout = () => {
         localStorage.removeItem("paytmtoken");
